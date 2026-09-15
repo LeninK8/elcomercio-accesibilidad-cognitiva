@@ -1,0 +1,6 @@
+{
+  "name": "Accesibilidad Cognitiva - El Comercio",
+  "description": "Prototipo funcional de noticia con plugin de accesibilidad cognitiva para lectores con TDAH, dislexia y fatiga atencional.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
