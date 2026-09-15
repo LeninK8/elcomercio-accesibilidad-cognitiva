@@ -109,10 +109,24 @@
       z-index: 10;
     }
 
-    /* Palette Themes on Article Body */
+    /* Palette Themes on Article Body (Fondo claro de bajo brillo por defecto) */
+    body {
+      background-color: #FAF8F5;
+      color: #1A1A1A;
+    }
+
+    .theme-neutral {
+      background-color: #FAF8F5 !important;
+      color: #1A1A1A !important;
+    }
+    .theme-neutral .article-card-bg {
+      background-color: #FFFFFF !important;
+      border-color: #E7E5E4 !important;
+    }
+
     .theme-sepia {
       background-color: #FBF0D9 !important;
-      color: #433422 !important;
+      color: #382E1E !important;
     }
     .theme-sepia .article-card-bg {
       background-color: #F4E5C3 !important;
@@ -123,15 +137,15 @@
     }
 
     .theme-cool {
-      background-color: #EEF2F5 !important;
-      color: #24323E !important;
+      background-color: #F8FAFC !important;
+      color: #1E293B !important;
     }
     .theme-cool .article-card-bg {
-      background-color: #DFE7ED !important;
-      border-color: #CBD8E2 !important;
+      background-color: #EDF2F7 !important;
+      border-color: #CBD5E1 !important;
     }
     .theme-cool .article-muted {
-      color: #526677 !important;
+      color: #475569 !important;
     }
 
     .theme-night {
@@ -151,9 +165,21 @@
     }
 
     /* ========================================================================= */
-    /* MODO INTERFAZ LIMPIA (Pantalla en negro + Máscara Párrafo a Párrafo) */
+    /* MODO INTERFAZ LIMPIA (Lectura Enfocada sin distracciones + Papel Claro por defecto) */
     /* ========================================================================= */
     body.clean-interface-mode {
+      background-color: #FAF8F5 !important;
+      color: #1A1A1A !important;
+    }
+    body.clean-interface-mode.theme-sepia {
+      background-color: #FBF0D9 !important;
+      color: #382E1E !important;
+    }
+    body.clean-interface-mode.theme-cool {
+      background-color: #F8FAFC !important;
+      color: #1E293B !important;
+    }
+    body.clean-interface-mode.theme-night {
       background-color: #121316 !important;
       color: #F3F4F6 !important;
     }
@@ -198,15 +224,18 @@
 
     body.clean-interface-mode #article-section-pill {
       background-color: transparent !important;
-      color: #22D3EE !important;
+      color: #0369A1 !important;
       padding: 0 !important;
       font-size: 0.85rem !important;
       font-weight: 800 !important;
       letter-spacing: 0.15em !important;
     }
+    body.clean-interface-mode.theme-night #article-section-pill {
+      color: #38BDF8 !important;
+    }
 
     body.clean-interface-mode #article-title {
-      color: #FFFFFF !important;
+      color: #1A1A1A !important;
       font-family: 'Merriweather', Georgia, serif !important;
       font-size: clamp(1.85rem, 3.5vw, 2.65rem) !important;
       line-height: 1.25 !important;
@@ -214,26 +243,36 @@
       margin-top: 0.75rem !important;
       margin-bottom: 1rem !important;
     }
+    body.clean-interface-mode.theme-night #article-title {
+      color: #FFFFFF !important;
+    }
 
     body.clean-interface-mode #article-subtitle {
-      color: #9CA3AF !important;
-      border-color: #262626 !important;
+      color: #4B5563 !important;
+      border-color: #E5E7EB !important;
       font-size: 1.15rem !important;
       line-height: 1.6 !important;
       margin-bottom: 1.5rem !important;
       padding-bottom: 1.25rem !important;
     }
+    body.clean-interface-mode.theme-night #article-subtitle {
+      color: #9CA3AF !important;
+      border-color: #262626 !important;
+    }
 
     body.clean-interface-mode .article-muted {
+      color: #6B7280 !important;
+    }
+    body.clean-interface-mode.theme-night .article-muted {
       color: #9CA3AF !important;
     }
 
     /* Párrafos en modo limpio: atenuados por defecto con máscara activa */
     body.clean-interface-mode .maskable-paragraph {
-      opacity: 0.28 !important;
+      opacity: 0.35 !important;
       filter: blur(0.2px) !important;
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-      color: #9CA3AF !important;
+      color: #6B7280 !important;
       background-color: transparent !important;
       border-left: 4px solid transparent !important;
       border-radius: 0.75rem !important;
@@ -244,51 +283,109 @@
       user-select: text !important;
     }
 
+    body.clean-interface-mode.theme-night .maskable-paragraph {
+      color: #9CA3AF !important;
+    }
+
     body.clean-interface-mode .maskable-paragraph:hover {
-      opacity: 0.65 !important;
+      opacity: 0.75 !important;
       filter: none !important;
+      background-color: rgba(0, 0, 0, 0.02) !important;
+    }
+    body.clean-interface-mode.theme-night .maskable-paragraph:hover {
       background-color: rgba(255, 255, 255, 0.03) !important;
     }
 
-    /* Párrafo enfocado: máximo contraste y resalte cian */
+    /* Párrafo enfocado: máximo contraste y resalte suave */
     body.clean-interface-mode .maskable-paragraph.focused-paragraph {
       opacity: 1 !important;
       filter: none !important;
-      background-color: #171920 !important;
-      color: #FFFFFF !important;
-      border-left: 4px solid #22D3EE !important;
-      box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(34, 211, 238, 0.2) !important;
+      background-color: #FFFDE7 !important;
+      color: #1A1A1A !important;
+      border-left: 5px solid #EAB308 !important;
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(234, 179, 8, 0.2) !important;
       position: relative !important;
       z-index: 20 !important;
       transform: scale(1.008) !important;
     }
 
-    body.clean-interface-mode .maskable-paragraph.focused-paragraph .ai-term {
-      border-bottom-color: #22D3EE !important;
-      background-color: rgba(34, 211, 238, 0.15) !important;
-      color: #67E8F9 !important;
+    body.clean-interface-mode.theme-night .maskable-paragraph.focused-paragraph {
+      background-color: #171920 !important;
+      color: #FFFFFF !important;
+      border-left: 5px solid #FACC15 !important;
+      box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(250, 204, 21, 0.2) !important;
     }
 
-    /* Glosario IA: palabras clave con subrayado punteado y cursor de ayuda */
+    body.clean-interface-mode .maskable-paragraph.focused-paragraph .ai-term {
+      border-bottom-color: #0284C7 !important;
+      background-color: #E0F2FE !important;
+      color: #0369A1 !important;
+    }
+    body.clean-interface-mode.theme-night .maskable-paragraph.focused-paragraph .ai-term {
+      border-bottom-color: #38BDF8 !important;
+      background-color: rgba(56, 189, 248, 0.2) !important;
+      color: #7DD3FC !important;
+    }
+
+    /* Barra inferior flotante de modo limpio adaptada a luz / noche */
+    body.clean-interface-mode #clean-mode-floating-bar {
+      background-color: rgba(255, 255, 255, 0.96) !important;
+      border-color: #E5E7EB !important;
+      color: #1A1A1A !important;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15) !important;
+    }
+    body.clean-interface-mode.theme-night #clean-mode-floating-bar {
+      background-color: rgba(24, 25, 26, 0.95) !important;
+      border-color: #374151 !important;
+      color: #F3F4F6 !important;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* Glosario IA: palabras clave con subrayado punteado y resaltado pastel celeste */
     .ai-term {
-      border-bottom: 2px dotted #EAB308;
-      background-color: rgba(254, 240, 138, 0.25);
-      padding: 1px 4px;
+      border-bottom: 2px dotted #0284C7;
+      background-color: #E0F2FE;
+      color: #0369A1;
+      padding: 1px 5px;
       border-radius: 4px;
       cursor: pointer;
       transition: all 0.2s ease;
       display: inline;
       font-weight: 600;
-      color: inherit;
     }
     .ai-term:hover {
-      background-color: #FEF08A;
-      color: #713F12;
+      background-color: #BAE6FD;
+      color: #0C4A6E;
+      border-bottom-color: #0369A1;
+    }
+    .theme-sepia .ai-term {
+      border-bottom-color: #B45309;
+      background-color: #FEF3C7;
+      color: #92400E;
     }
     .theme-night .ai-term {
-      border-bottom-color: #FACC15;
-      background-color: rgba(234, 179, 8, 0.25);
-      color: #FEF08A;
+      border-bottom-color: #38BDF8;
+      background-color: rgba(56, 189, 248, 0.2);
+      color: #7DD3FC;
+    }
+
+    /* Resaltado visual en vivo para lectura por voz */
+    .speech-reading-active {
+      background-color: #FEF08A !important;
+      color: #1A1A1A !important;
+      box-shadow: 0 0 0 3px #FACC15, 0 8px 24px -4px rgba(0, 0, 0, 0.12) !important;
+      border-left: 5px solid #D97706 !important;
+      border-radius: 0.5rem !important;
+      position: relative !important;
+      z-index: 30 !important;
+      transition: all 0.2s ease-in-out !important;
+    }
+    .theme-night .speech-reading-active,
+    body.clean-interface-mode.theme-night .speech-reading-active {
+      background-color: #1E293B !important;
+      color: #F8FAFC !important;
+      box-shadow: 0 0 0 3px #38BDF8 !important;
+      border-left: 5px solid #38BDF8 !important;
     }
 
     /* Clean outline for focus accessibility */
@@ -668,7 +765,7 @@
           </div>
 
           <p id="para-1" class="maskable-paragraph p-3 rounded-lg transition-all relative group border border-transparent hover:border-yellow-200">
-            El Pleno del Congreso de la República retomó este martes la deliberación en torno al dictamen consolidado que propone una reestructuración integral del <span class="ai-term" data-term="sistema previsional">sistema previsional</span> nacional. La iniciativa legislativa reúne planteamientos formulados tanto por la Comisión de Economía como por la de Trabajo, con el objetivo declarado de ampliar la cobertura jubilatoria a los sectores independientes e informales de la población económicamente activa.
+            El Pleno del Congreso de la República retomó este martes la deliberación en torno al <span class="ai-term" data-term="dictamen">dictamen</span> consolidado que propone una reestructuración integral del <span class="ai-term" data-term="sistema previsional">sistema previsional</span> nacional. La iniciativa legislativa reúne planteamientos formulados tanto por la Comisión de Economía como por la de Trabajo, con el objetivo declarado de ampliar la <span class="ai-term" data-term="cobertura jubilatoria">cobertura jubilatoria</span> a los sectores independientes e informales de la población económicamente activa.
             <button type="button" class="para-speech-btn hidden group-hover:inline-flex items-center gap-1 ml-2 px-2 py-0.5 bg-yellow-100 hover:bg-yellow-200 text-neutral-800 rounded text-xs font-bold transition cursor-pointer" data-para-idx="0" title="Escuchar este párrafo">
               🔊 Escuchar
             </button>
@@ -1241,28 +1338,66 @@
           </div>
         </div>
 
-        <!-- Tarjeta 4: Voz adaptativa -->
-        <div class="p-4 rounded-xl border-2 border-neutral-200 hover:border-yellow-400/80 bg-white transition-all shadow-xs flex items-center justify-between gap-4">
-          <div class="flex items-start gap-3.5">
-            <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-900 flex items-center justify-center text-xl flex-shrink-0" aria-hidden="true">
-              🔊
+        <!-- Tarjeta 4: Voz adaptativa con selector de voces naturales -->
+        <div class="p-4 rounded-xl border-2 border-neutral-200 hover:border-yellow-400/80 bg-white transition-all shadow-xs space-y-3">
+          <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-900 flex items-center justify-center text-xl flex-shrink-0" aria-hidden="true">
+                🔊
+              </div>
+              <div>
+                <h3 class="font-bold text-neutral-900 text-base">Voz adaptativa</h3>
+                <p class="text-xs text-neutral-600 mt-0.5 leading-snug">
+                  Lectura en voz alta con síntesis natural.
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 class="font-bold text-neutral-900 text-base">Voz adaptativa</h3>
-              <p class="text-xs text-neutral-600 mt-0.5 leading-snug">
-                Lee en voz alta, ritmo ajustable.
-              </p>
-            </div>
-          </div>
-          <!-- Control: Botón 'Aplicar' / Icono de Play -->
-          <div class="flex-shrink-0">
+            <!-- Control: Botón 'Escuchar / Detener' -->
             <button 
               id="btn-apply-voice" 
-              class="min-touch px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-sm flex items-center gap-1.5 shadow-xs transition cursor-pointer"
+              class="min-touch px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg text-sm flex items-center gap-1.5 shadow-xs transition cursor-pointer flex-shrink-0"
               title="Escuchar noticia"
             >
-              <span aria-hidden="true">▶</span>
-              <span>Aplicar</span>
+              <span aria-hidden="true" id="btn-apply-voice-icon">▶</span>
+              <span id="btn-apply-voice-label">Escuchar</span>
+            </button>
+          </div>
+
+          <!-- Selector de voz y controles rápidos en panel -->
+          <div class="pt-2 border-t border-neutral-100 space-y-2 text-xs">
+            <div>
+              <label for="drawer-voice-selector" class="block font-bold text-neutral-700 mb-1">
+                Voz natural en español:
+              </label>
+              <select 
+                id="drawer-voice-selector" 
+                class="w-full p-2 bg-neutral-50 border border-neutral-300 rounded-lg text-xs font-semibold text-neutral-900 focus:outline-none focus:border-yellow-400 cursor-pointer"
+              >
+                <option value="0">Cargando voces disponibles...</option>
+              </select>
+              <span class="text-[10px] text-neutral-500 mt-0.5 block">Detección automática de voces disponibles en tu dispositivo.</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 pt-1">
+              <div class="bg-neutral-50 p-2 rounded-lg border border-neutral-200">
+                <div class="flex items-center justify-between font-bold text-neutral-700 mb-1">
+                  <span>Velocidad</span>
+                  <span id="drawer-speed-val" class="font-mono text-amber-800">0.9x</span>
+                </div>
+                <input id="drawer-speed-slider" type="range" min="0.7" max="1.3" step="0.1" value="0.9" class="w-full accent-yellow-400 cursor-pointer">
+              </div>
+
+              <div class="bg-neutral-50 p-2 rounded-lg border border-neutral-200">
+                <div class="flex items-center justify-between font-bold text-neutral-700 mb-1">
+                  <span>Tono (Pitch)</span>
+                  <span id="drawer-pitch-val" class="font-mono text-amber-800">1.0</span>
+                </div>
+                <input id="drawer-pitch-slider" type="range" min="0.8" max="1.2" step="0.1" value="1.0" class="w-full accent-yellow-400 cursor-pointer">
+              </div>
+            </div>
+
+            <button id="btn-drawer-voice-test" type="button" class="w-full py-2 px-3 bg-neutral-100 hover:bg-yellow-100 text-neutral-900 border border-neutral-300 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <span>🎧</span> <span>Probar voz seleccionada</span>
             </button>
           </div>
         </div>
@@ -1566,29 +1701,67 @@
           </div>
         </div>
 
-        <!-- 4. Velocidad de voz -->
+        <!-- 4. Velocidad y Selector de Voz Natural -->
         <div>
           <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-2">
-            4. Velocidad de lectura en voz alta
+            4. Voz natural y ritmo de lectura
           </label>
-          <div class="flex flex-wrap items-center gap-2 mb-2">
-            <button data-speed="0.9" class="voice-speed-btn min-touch px-3 py-1.5 rounded-lg border-2 border-yellow-500 bg-yellow-50 text-xs font-bold text-neutral-900 transition">
-              Lenta (0.9x)
-            </button>
-            <button data-speed="1.0" class="voice-speed-btn min-touch px-3 py-1.5 rounded-lg border-2 border-neutral-200 bg-white text-xs font-semibold text-neutral-700 hover:border-neutral-300 transition">
-              Normal (1.0x)
-            </button>
-            <button data-speed="1.3" class="voice-speed-btn min-touch px-3 py-1.5 rounded-lg border-2 border-neutral-200 bg-white text-xs font-semibold text-neutral-700 hover:border-neutral-300 transition">
-              Rápida (1.3x)
+          <div class="space-y-3 bg-neutral-50 p-3.5 rounded-xl border border-neutral-200">
+            <div>
+              <label for="profile-voice-selector" class="block text-xs font-bold text-neutral-800 mb-1">
+                Voz detectada del sistema:
+              </label>
+              <select 
+                id="profile-voice-selector" 
+                class="w-full p-2.5 bg-white border border-neutral-300 rounded-lg text-xs font-semibold text-neutral-900 focus:outline-none focus:border-yellow-400 cursor-pointer"
+              >
+                <option value="0">Cargando voces en español...</option>
+              </select>
+            </div>
+
+            <div class="space-y-2 pt-1">
+              <div>
+                <div class="flex items-center justify-between text-xs font-bold text-neutral-800 mb-1">
+                  <span>Velocidad de reproducción</span>
+                  <span id="profile-speed-val" class="font-mono text-amber-800 font-bold">0.9x</span>
+                </div>
+                <input id="profile-voice-speed-slider" type="range" min="0.7" max="1.3" step="0.1" value="0.9" class="w-full accent-yellow-400 cursor-pointer">
+                <div class="flex flex-wrap items-center gap-2 mt-2">
+                  <button type="button" data-speed="0.9" class="voice-speed-btn min-touch px-3 py-1 rounded-lg border-2 border-yellow-500 bg-yellow-50 text-xs font-bold text-neutral-900 transition">
+                    Lenta (0.9x)
+                  </button>
+                  <button type="button" data-speed="1.0" class="voice-speed-btn min-touch px-3 py-1 rounded-lg border-2 border-neutral-200 bg-white text-xs font-semibold text-neutral-700 hover:border-neutral-300 transition">
+                    Normal (1.0x)
+                  </button>
+                  <button type="button" data-speed="1.3" class="voice-speed-btn min-touch px-3 py-1 rounded-lg border-2 border-neutral-200 bg-white text-xs font-semibold text-neutral-700 hover:border-neutral-300 transition">
+                    Rápida (1.3x)
+                  </button>
+                </div>
+              </div>
+
+              <div class="pt-2 border-t border-neutral-200">
+                <div class="flex items-center justify-between text-xs font-bold text-neutral-800 mb-1">
+                  <span>Tono de voz (Pitch)</span>
+                  <span id="profile-pitch-val" class="font-mono text-amber-800 font-bold">1.0</span>
+                </div>
+                <input id="profile-voice-pitch-slider" type="range" min="0.8" max="1.2" step="0.1" value="1.0" class="w-full accent-yellow-400 cursor-pointer">
+                <div class="flex justify-between text-[10px] text-neutral-500 mt-0.5">
+                  <span>0.8 (Grave)</span>
+                  <span>1.0 (Natural)</span>
+                  <span>1.2 (Agudo)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botón Probar Voz Natural -->
+            <button 
+              id="btn-voice-test" 
+              type="button"
+              class="min-touch w-full py-2.5 px-3 bg-yellow-400 hover:bg-yellow-300 text-neutral-950 rounded-lg font-bold text-xs flex items-center justify-center gap-2 transition cursor-pointer shadow-xs"
+            >
+              <span>◁)) Probar voz natural seleccionada</span>
             </button>
           </div>
-          <!-- Botón '◁)) Probar' requerido -->
-          <button 
-            id="btn-voice-test" 
-            class="min-touch w-full py-2 px-3 bg-neutral-200 hover:bg-neutral-300 text-neutral-800 rounded font-semibold text-xs flex items-center justify-center gap-2 transition"
-          >
-            <span>◁)) Probar velocidad</span>
-          </button>
         </div>
 
         <!-- 5. Vista previa en tiempo real -->
@@ -1829,12 +2002,12 @@
       <form id="form-subscribe" class="space-y-3.5 text-xs" onsubmit="return false;">
         <div>
           <label for="sub-input-name" class="block font-bold text-neutral-700 mb-1">Nombre completo</label>
-          <input id="sub-input-name" type="text" placeholder="correorandomgmail.com" value="correorandomgmail.com" class="w-full px-3.5 py-2.5 rounded-lg border border-neutral-300 focus:outline-none focus:border-yellow-400 font-medium text-sm">
+          <input id="sub-input-name" type="text" placeholder="Tu nombre y apellidos" value="" class="w-full px-3.5 py-2.5 rounded-lg border border-neutral-300 focus:outline-none focus:border-yellow-400 font-medium text-sm">
         </div>
 
         <div>
           <label for="sub-input-email" class="block font-bold text-neutral-700 mb-1">Correo electrónico</label>
-          <input id="sub-input-email" type="text" placeholder="correorandomgmail.com" value="correorandomgmail.com" class="w-full px-3.5 py-2.5 rounded-lg border border-neutral-300 focus:outline-none focus:border-yellow-400 font-medium text-sm">
+          <input id="sub-input-email" type="email" placeholder="tu.correo@ejemplo.com" value="" class="w-full px-3.5 py-2.5 rounded-lg border border-neutral-300 focus:outline-none focus:border-yellow-400 font-medium text-sm">
           <span class="text-[10px] text-neutral-500 mt-1 block">Validación simulada inmediata sin esperas de servidor.</span>
         </div>
 
@@ -1906,7 +2079,7 @@
       <form id="form-login" class="space-y-3.5 text-xs" onsubmit="return false;">
         <div>
           <label for="login-input-email" class="block font-bold text-neutral-700 mb-1">Correo electrónico</label>
-          <input id="login-input-email" type="text" placeholder="correorandomgmail.com" value="correorandomgmail.com" class="w-full px-3.5 py-2.5 rounded-lg border border-neutral-300 focus:outline-none focus:border-yellow-400 font-medium text-sm">
+          <input id="login-input-email" type="email" placeholder="tu.correo@ejemplo.com" value="" class="w-full px-3.5 py-2.5 rounded-lg border border-neutral-300 focus:outline-none focus:border-yellow-400 font-medium text-sm">
         </div>
 
         <div>
@@ -1916,7 +2089,7 @@
               Mostrar
             </button>
           </div>
-          <input id="login-input-password" type="password" placeholder="••••••••" value="galletaoreo" class="w-full px-3.5 py-2.5 rounded-lg border border-neutral-300 focus:outline-none focus:border-yellow-400 font-medium text-sm font-mono">
+          <input id="login-input-password" type="password" placeholder="••••••••" value="" class="w-full px-3.5 py-2.5 rounded-lg border border-neutral-300 focus:outline-none focus:border-yellow-400 font-medium text-sm font-mono">
         </div>
 
         <div class="flex items-center justify-between text-[11px] pt-1">
@@ -1968,7 +2141,7 @@
           videoThumb: 'https://images.unsplash.com/photo-1526470608268-f674ce90ebd4?auto=format&fit=crop&w=1000&q=80',
           viewers: '14.2K espectadores',
           paragraphs: [
-            'El Pleno del Congreso de la República retomó este martes la deliberación en torno al dictamen consolidado que propone una reestructuración integral del <span class="ai-term" data-term="sistema previsional">sistema previsional</span> nacional. La iniciativa legislativa reúne planteamientos formulados tanto por la Comisión de Economía como por la de Trabajo, con el objetivo declarado de ampliar la cobertura jubilatoria a los sectores independientes e informales de la población económicamente activa.',
+            'El Pleno del Congreso de la República retomó este martes la deliberación en torno al <span class="ai-term" data-term="dictamen">dictamen</span> consolidado que propone una reestructuración integral del <span class="ai-term" data-term="sistema previsional">sistema previsional</span> nacional. La iniciativa legislativa reúne planteamientos formulados tanto por la Comisión de Economía como por la de Trabajo, con el objetivo declarado de ampliar la <span class="ai-term" data-term="cobertura jubilatoria">cobertura jubilatoria</span> a los sectores independientes e informales de la población económicamente activa.',
             'Entre los aspectos centrales del documento que se discute en el Palacio Legislativo figura la adopción de un <span class="ai-term" data-term="modelo multipilar">modelo multipilar</span>. Este esquema contempla un <span class="ai-term" data-term="pilar solidario">pilar solidario</span> financiado con recursos del <span class="ai-term" data-term="tesoro publico">tesoro público</span> para garantizar una asignación mínima a personas en situación de vulnerabilidad extrema, complementado por un pilar contributivo individual obligatorio donde convergerían las entidades privadas administradoras de fondos.',
             'Sin embargo, representantes del <span class="ai-term" data-term="MEF">Ministerio de Economía y Finanzas (MEF)</span> y de la <span class="ai-term" data-term="SBS">Superintendencia de Banca, Seguros y AFP (SBS)</span> han remitido observaciones técnicas al Parlamento. Los voceros de ambas instituciones hicieron hincapié en que la <span class="ai-term" data-term="sostenibilidad fiscal">sostenibilidad fiscal</span> del país exige que cualquier aporte estatal esté expresamente respaldado por proyecciones de recaudación tributaria a largo plazo, advirtiendo sobre el impacto contingente en la caja fiscal.',
             'Asimismo, otro de los puntos de discusión dentro de las bancadas radica en autorizar el ingreso de entidades del sistema financiero tradicional (tales como bancos, financieras y cajas municipales) a la administración de fondos de pensiones. Los defensores de esta medida aseguran que una mayor oferta dinamizará la competencia y forzará una reducción sustancial de las comisiones de administración cobradas a los afiliados.',
@@ -2264,6 +2437,14 @@
       // DICCIONARIO COGNITIVO DEL GLOSARIO IA (Lenguaje Sencillo WCAG)
       // =======================================================================
       const glossaryTerms = {
+        'dictamen': {
+          title: 'Dictamen Legislativo',
+          def: 'Es el documento técnico formal aprobado por una comisión parlamentaria de congresistas para que luego todo el Pleno del Congreso debata y vote su aprobación final como ley.'
+        },
+        'cobertura jubilatoria': {
+          title: 'Cobertura Jubilatoria',
+          def: 'Es la proporción o cantidad de trabajadores y personas adultas mayores que cuentan con el respaldo de una pensión económica garantizada para su vejez.'
+        },
         'sistema previsional': {
           title: 'Sistema Previsional',
           def: 'Es el conjunto de normas y fondos (como las AFP y la ONP) donde los trabajadores guardan dinero durante sus años de trabajo para recibir una pensión mensual cuando lleguen a la vejez.'
@@ -2391,39 +2572,96 @@
       };
 
       // =======================================================================
-      // ESTADO GLOBAL DE LA APLICACIÓN
+      // ESTADO GLOBAL DE LA APLICACIÓN & MEMORIA PERSISTENTE (localStorage)
       // =======================================================================
+      const STORAGE_KEY = 'elcomercio_accessibility_profile_v3';
+
       const state = {
         currentArticleKey: 'politica',
-        currentAiSummaryMode: 'keypoints', // 'keypoints', 'express', 'easy'
+        currentAiSummaryMode: 'keypoints', // 'keypoints' (Modo Rápido), 'explained' (Modo Explicado), 'express', 'easy'
         isAdaptiveTextActive: false,
         isCleanInterfaceActive: false,
         isReadingMaskActive: false,
         activeParagraphIndex: 0,
         
-        // Preferencias de perfil dinámico
+        // Preferencias de perfil dinámico (Fondo claro por defecto WCAG)
         fontSize: 20, // 16 a 26 px
         fontFamily: 'dyslexic', // 'dyslexic', 'sans', 'serif'
         palette: 'neutral', // 'neutral', 'sepia', 'cool', 'night'
         voiceSpeed: 0.9,
+        voicePitch: 1.0,
+        selectedVoiceIndex: 0,
         
         // Estado temporal mientras edita en Pantalla 5 (para permitir Cancelar)
         draftConfig: {
           fontSize: 20,
           fontFamily: 'dyslexic',
           palette: 'neutral',
-          voiceSpeed: 0.9
+          voiceSpeed: 0.9,
+          voicePitch: 1.0,
+          selectedVoiceIndex: 0
         },
 
-        // Síntesis de voz
+        // Síntesis de voz enriquecida
         speechSynth: window.speechSynthesis || null,
         currentUtterance: null,
         isSpeaking: false,
+        availableVoices: [],
+        spanishVoices: [],
 
         // Video interactivo
         isVideoPlaying: true,
         isVideoMuted: true
       };
+
+      function saveState() {
+        try {
+          const toSave = {
+            fontSize: state.fontSize,
+            fontFamily: state.fontFamily,
+            palette: state.palette,
+            voiceSpeed: state.voiceSpeed,
+            voicePitch: state.voicePitch,
+            selectedVoiceIndex: state.selectedVoiceIndex,
+            currentAiSummaryMode: state.currentAiSummaryMode,
+            isAdaptiveTextActive: state.isAdaptiveTextActive,
+            isCleanInterfaceActive: state.isCleanInterfaceActive,
+            isReadingMaskActive: state.isReadingMaskActive
+          };
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+        } catch (e) {
+          console.warn('No se pudo guardar la configuración en localStorage:', e);
+        }
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          const parsed = JSON.parse(raw);
+          if (parsed.fontSize && parsed.fontSize >= 16 && parsed.fontSize <= 26) state.fontSize = parsed.fontSize;
+          if (parsed.fontFamily) state.fontFamily = parsed.fontFamily;
+          if (parsed.palette) state.palette = parsed.palette;
+          if (typeof parsed.voiceSpeed === 'number') state.voiceSpeed = parsed.voiceSpeed;
+          if (typeof parsed.voicePitch === 'number') state.voicePitch = parsed.voicePitch;
+          if (typeof parsed.selectedVoiceIndex === 'number') state.selectedVoiceIndex = parsed.selectedVoiceIndex;
+          if (parsed.currentAiSummaryMode) state.currentAiSummaryMode = parsed.currentAiSummaryMode;
+          if (typeof parsed.isCleanInterfaceActive === 'boolean') state.isCleanInterfaceActive = parsed.isCleanInterfaceActive;
+          if (typeof parsed.isReadingMaskActive === 'boolean') state.isReadingMaskActive = parsed.isReadingMaskActive;
+          if (typeof parsed.isAdaptiveTextActive === 'boolean') state.isAdaptiveTextActive = parsed.isAdaptiveTextActive;
+
+          state.draftConfig = {
+            fontSize: state.fontSize,
+            fontFamily: state.fontFamily,
+            palette: state.palette,
+            voiceSpeed: state.voiceSpeed,
+            voicePitch: state.voicePitch,
+            selectedVoiceIndex: state.selectedVoiceIndex
+          };
+        } catch (e) {
+          console.warn('No se pudo recuperar la configuración de localStorage:', e);
+        }
+      }
 
       // Elementos DOM del Artículo
       const body = document.getElementById('app-body');
@@ -2507,6 +2745,14 @@
       const toggleAdaptiveText = document.getElementById('toggle-adaptive-text');
       const toggleCleanInterface = document.getElementById('toggle-clean-interface');
       const btnApplyVoice = document.getElementById('btn-apply-voice');
+      const btnApplyVoiceIcon = document.getElementById('btn-apply-voice-icon');
+      const btnApplyVoiceLabel = document.getElementById('btn-apply-voice-label');
+      const drawerVoiceSelector = document.getElementById('drawer-voice-selector');
+      const drawerSpeedSlider = document.getElementById('drawer-speed-slider');
+      const drawerSpeedVal = document.getElementById('drawer-speed-val');
+      const drawerPitchSlider = document.getElementById('drawer-pitch-slider');
+      const drawerPitchVal = document.getElementById('drawer-pitch-val');
+      const btnDrawerVoiceTest = document.getElementById('btn-drawer-voice-test');
 
       // IA Local en Panel
       const aiResponseText = document.getElementById('ai-response-text');
@@ -2531,6 +2777,11 @@
       const btnFontIncrease = document.getElementById('btn-font-increase');
       const previewBox = document.getElementById('preview-box');
       const previewText = document.getElementById('preview-text');
+      const profileVoiceSelector = document.getElementById('profile-voice-selector');
+      const profileVoiceSpeedSlider = document.getElementById('profile-voice-speed-slider');
+      const profileSpeedVal = document.getElementById('profile-speed-val');
+      const profileVoicePitchSlider = document.getElementById('profile-voice-pitch-slider');
+      const profilePitchVal = document.getElementById('profile-pitch-val');
       const btnVoiceTest = document.getElementById('btn-voice-test');
       const btnProfileApply = document.getElementById('btn-profile-apply');
       const btnProfileCancel = document.getElementById('btn-profile-cancel');
@@ -2651,17 +2902,27 @@
             const idx = parseInt(btn.getAttribute('data-para-idx'), 10);
             if (!isNaN(idx) && paragraphs[idx]) {
               const textOnly = paragraphs[idx].innerText.replace(/🔊 Escuchar/g, '').trim();
-              speakText(textOnly);
+              speakText(textOnly, state.voiceSpeed, state.voicePitch, paragraphs[idx]);
             }
           });
         });
 
         // Click en términos con Glosario
         document.querySelectorAll('.ai-term').forEach(termEl => {
-          termEl.addEventListener('click', (e) => {
+          termEl.setAttribute('tabindex', '0');
+          termEl.setAttribute('role', 'button');
+          termEl.setAttribute('aria-haspopup', 'dialog');
+          const triggerTerm = (e) => {
             e.stopPropagation();
             const termKey = termEl.getAttribute('data-term');
             openGlossary(termKey);
+          };
+          termEl.addEventListener('click', triggerTerm);
+          termEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              triggerTerm(e);
+            }
           });
         });
       }
@@ -3409,13 +3670,27 @@
         state.fontFamily = 'dyslexic';
         state.palette = 'neutral';
         state.voiceSpeed = 0.9;
+        state.voicePitch = 1.0;
+        state.selectedVoiceIndex = 0;
+
+        state.draftConfig = {
+          fontSize: 20,
+          fontFamily: 'dyslexic',
+          palette: 'neutral',
+          voiceSpeed: 0.9,
+          voicePitch: 1.0,
+          selectedVoiceIndex: 0
+        };
         
+        saveState();
         applyProfileToDOM();
+        syncVoiceUI();
         closePanel();
+        showToast('Preferencias restablecidas a los valores originales');
       });
 
       // =======================================================================
-      // PANTALLA 5: CONFIGURACIÓN DE PERFIL DINÁMICO
+      // PANTALLA 5: CONFIGURACIÓN DE PERFIL DINÁMICO & SELECTORES
       // =======================================================================
       function renderProfileDraftControls() {
         fontSizeIndicator.textContent = `${state.draftConfig.fontSize} px`;
@@ -3426,11 +3701,11 @@
           if (font === state.draftConfig.fontFamily) {
             btn.classList.add('border-yellow-500', 'bg-yellow-50/50');
             btn.classList.remove('border-neutral-200');
-            checkIcon.classList.remove('hidden');
+            if (checkIcon) checkIcon.classList.remove('hidden');
           } else {
             btn.classList.remove('border-yellow-500', 'bg-yellow-50/50');
             btn.classList.add('border-neutral-200');
-            checkIcon.classList.add('hidden');
+            if (checkIcon) checkIcon.classList.add('hidden');
           }
         });
 
@@ -3440,17 +3715,17 @@
           if (pal === state.draftConfig.palette) {
             btn.classList.add('border-yellow-500');
             btn.classList.remove('border-neutral-200');
-            checkIcon.classList.remove('hidden');
+            if (checkIcon) checkIcon.classList.remove('hidden');
           } else {
             btn.classList.remove('border-yellow-500');
             btn.classList.add('border-neutral-200');
-            checkIcon.classList.add('hidden');
+            if (checkIcon) checkIcon.classList.add('hidden');
           }
         });
 
         document.querySelectorAll('.voice-speed-btn').forEach(btn => {
           const speed = parseFloat(btn.getAttribute('data-speed'));
-          if (speed === state.draftConfig.voiceSpeed) {
+          if (Math.abs(speed - state.draftConfig.voiceSpeed) < 0.05) {
             btn.classList.add('border-yellow-500', 'bg-yellow-50', 'text-neutral-900');
             btn.classList.remove('border-neutral-200', 'text-neutral-700');
           } else {
@@ -3458,6 +3733,24 @@
             btn.classList.add('border-neutral-200', 'text-neutral-700');
           }
         });
+
+        if (profileVoiceSpeedSlider) {
+          profileVoiceSpeedSlider.value = state.draftConfig.voiceSpeed;
+        }
+        if (profileSpeedVal) {
+          profileSpeedVal.textContent = `${state.draftConfig.voiceSpeed}x`;
+        }
+
+        if (profileVoicePitchSlider) {
+          profileVoicePitchSlider.value = state.draftConfig.voicePitch;
+        }
+        if (profilePitchVal) {
+          profilePitchVal.textContent = `${state.draftConfig.voicePitch}`;
+        }
+
+        if (profileVoiceSelector && state.spanishVoices.length > 0) {
+          profileVoiceSelector.value = String(state.draftConfig.selectedVoiceIndex);
+        }
 
         updatePreviewBox();
       }
@@ -3515,24 +3808,104 @@
 
       document.querySelectorAll('.voice-speed-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-          state.draftConfig.voiceSpeed = parseFloat(btn.getAttribute('data-speed'));
+          const speed = parseFloat(btn.getAttribute('data-speed'));
+          state.draftConfig.voiceSpeed = speed;
           renderProfileDraftControls();
         });
       });
+
+      // Controles deslizantes en Modal de Perfil
+      if (profileVoiceSpeedSlider) {
+        profileVoiceSpeedSlider.addEventListener('input', (e) => {
+          state.draftConfig.voiceSpeed = parseFloat(e.target.value);
+          if (profileSpeedVal) profileSpeedVal.textContent = `${state.draftConfig.voiceSpeed}x`;
+          document.querySelectorAll('.voice-speed-btn').forEach(btn => {
+            const sp = parseFloat(btn.getAttribute('data-speed'));
+            if (Math.abs(sp - state.draftConfig.voiceSpeed) < 0.05) {
+              btn.classList.add('border-yellow-500', 'bg-yellow-50', 'text-neutral-900');
+              btn.classList.remove('border-neutral-200', 'text-neutral-700');
+            } else {
+              btn.classList.remove('border-yellow-500', 'bg-yellow-50', 'text-neutral-900');
+              btn.classList.add('border-neutral-200', 'text-neutral-700');
+            }
+          });
+        });
+      }
+
+      if (profileVoicePitchSlider) {
+        profileVoicePitchSlider.addEventListener('input', (e) => {
+          state.draftConfig.voicePitch = parseFloat(e.target.value);
+          if (profilePitchVal) profilePitchVal.textContent = `${state.draftConfig.voicePitch}`;
+        });
+      }
+
+      if (profileVoiceSelector) {
+        profileVoiceSelector.addEventListener('change', (e) => {
+          state.draftConfig.selectedVoiceIndex = parseInt(e.target.value, 10) || 0;
+        });
+      }
 
       btnProfileApply.addEventListener('click', () => {
         state.fontSize = state.draftConfig.fontSize;
         state.fontFamily = state.draftConfig.fontFamily;
         state.palette = state.draftConfig.palette;
         state.voiceSpeed = state.draftConfig.voiceSpeed;
+        state.voicePitch = state.draftConfig.voicePitch;
+        state.selectedVoiceIndex = state.draftConfig.selectedVoiceIndex;
 
+        syncVoiceUI();
+        saveState();
         applyProfileToDOM();
         showMainPanelView();
+        showToast('Preferencias y configuración de voz guardadas');
       });
 
       btnProfileCancel.addEventListener('click', () => {
+        // Revertir draftConfig al estado confirmado
+        state.draftConfig = {
+          fontSize: state.fontSize,
+          fontFamily: state.fontFamily,
+          palette: state.palette,
+          voiceSpeed: state.voiceSpeed,
+          voicePitch: state.voicePitch,
+          selectedVoiceIndex: state.selectedVoiceIndex
+        };
         showMainPanelView();
       });
+
+      function syncVoiceUI() {
+        if (drawerVoiceSelector && state.spanishVoices.length > 0) {
+          drawerVoiceSelector.value = String(state.selectedVoiceIndex);
+        }
+        if (drawerSpeedSlider) {
+          drawerSpeedSlider.value = state.voiceSpeed;
+        }
+        if (drawerSpeedVal) {
+          drawerSpeedVal.textContent = `${state.voiceSpeed}x`;
+        }
+        if (drawerPitchSlider) {
+          drawerPitchSlider.value = state.voicePitch;
+        }
+        if (drawerPitchVal) {
+          drawerPitchVal.textContent = `${state.voicePitch}`;
+        }
+
+        if (profileVoiceSelector && state.spanishVoices.length > 0) {
+          profileVoiceSelector.value = String(state.selectedVoiceIndex);
+        }
+        if (profileVoiceSpeedSlider) {
+          profileVoiceSpeedSlider.value = state.voiceSpeed;
+        }
+        if (profileSpeedVal) {
+          profileSpeedVal.textContent = `${state.voiceSpeed}x`;
+        }
+        if (profileVoicePitchSlider) {
+          profileVoicePitchSlider.value = state.voicePitch;
+        }
+        if (profilePitchVal) {
+          profilePitchVal.textContent = `${state.voicePitch}`;
+        }
+      }
 
       function applyProfileToDOM() {
         originalTextContent.style.fontSize = `${state.fontSize}px`;
@@ -3563,11 +3936,131 @@
       }
 
       // =======================================================================
-      // MOTOR DE SÍNTESIS DE VOZ ADAPTATIVA (Web Speech API)
+      // MOTOR DE SÍNTESIS DE VOZ ADAPTATIVA (Web Speech API Enriquecida)
       // =======================================================================
-      function speakText(textToSpeak, speed = state.voiceSpeed) {
+      let currentlyHighlightedEl = null;
+
+      function clearSpeechHighlight() {
+        if (currentlyHighlightedEl) {
+          currentlyHighlightedEl.classList.remove('speech-reading-active');
+          currentlyHighlightedEl = null;
+        }
+        document.querySelectorAll('.speech-reading-active').forEach(el => {
+          el.classList.remove('speech-reading-active');
+        });
+      }
+
+      function initVoiceSynthesis() {
         if (!state.speechSynth) {
-          console.warn('La síntesis de voz no está soportada.');
+          console.warn('Web Speech API no disponible en este navegador.');
+          return;
+        }
+
+        function populateVoices() {
+          const allVoices = state.speechSynth.getVoices();
+          state.availableVoices = allVoices;
+
+          // Filtrar voces en español prioritariamente (es-PE, es-419, es-ES, es-MX, etc.)
+          let esVoices = allVoices.filter(v => v.lang && v.lang.toLowerCase().startsWith('es'));
+          
+          if (esVoices.length === 0) {
+            // Si el sistema no tiene voces identificadas como 'es', usar las disponibles
+            esVoices = allVoices;
+          }
+
+          state.spanishVoices = esVoices;
+
+          // Mapeo amigable de país o región
+          const regionNames = {
+            'pe': 'Perú',
+            'es': 'España',
+            'mx': 'México',
+            'ar': 'Argentina',
+            'co': 'Colombia',
+            'cl': 'Chile',
+            'us': 'EE.UU.',
+            '419': 'Latinoamérica'
+          };
+
+          function buildOptionsHTML() {
+            if (esVoices.length === 0) {
+              return '<option value="0">Voz predeterminada del navegador</option>';
+            }
+
+            return esVoices.map((v, index) => {
+              const langCode = (v.lang.split('-')[1] || '').toLowerCase();
+              const region = regionNames[langCode] || v.lang;
+              const isNatural = v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('online') || v.name.toLowerCase().includes('neural');
+              const naturalBadge = isNatural ? ' ★ [Natural]' : '';
+              const cleanName = v.name.replace(/Microsoft|Google|Apple|Desktop|Natural/gi, '').trim();
+              return `<option value="${index}">Español (${region}) - ${cleanName || v.name}${naturalBadge}</option>`;
+            }).join('');
+          }
+
+          const optionsHtml = buildOptionsHTML();
+
+          if (drawerVoiceSelector) {
+            drawerVoiceSelector.innerHTML = optionsHtml;
+            if (state.selectedVoiceIndex < esVoices.length) {
+              drawerVoiceSelector.value = String(state.selectedVoiceIndex);
+            }
+          }
+
+          if (profileVoiceSelector) {
+            profileVoiceSelector.innerHTML = optionsHtml;
+            if (state.selectedVoiceIndex < esVoices.length) {
+              profileVoiceSelector.value = String(state.selectedVoiceIndex);
+            }
+          }
+        }
+
+        populateVoices();
+        if (state.speechSynth.onvoiceschanged !== undefined) {
+          state.speechSynth.onvoiceschanged = populateVoices;
+        }
+
+        // Eventos en Drawer Tarjeta 4
+        if (drawerVoiceSelector) {
+          drawerVoiceSelector.addEventListener('change', (e) => {
+            state.selectedVoiceIndex = parseInt(e.target.value, 10) || 0;
+            state.draftConfig.selectedVoiceIndex = state.selectedVoiceIndex;
+            if (profileVoiceSelector) profileVoiceSelector.value = String(state.selectedVoiceIndex);
+            saveState();
+          });
+        }
+
+        if (drawerSpeedSlider) {
+          drawerSpeedSlider.addEventListener('input', (e) => {
+            state.voiceSpeed = parseFloat(e.target.value);
+            state.draftConfig.voiceSpeed = state.voiceSpeed;
+            if (drawerSpeedVal) drawerSpeedVal.textContent = `${state.voiceSpeed}x`;
+            if (profileVoiceSpeedSlider) profileVoiceSpeedSlider.value = state.voiceSpeed;
+            if (profileSpeedVal) profileSpeedVal.textContent = `${state.voiceSpeed}x`;
+            saveState();
+          });
+        }
+
+        if (drawerPitchSlider) {
+          drawerPitchSlider.addEventListener('input', (e) => {
+            state.voicePitch = parseFloat(e.target.value);
+            state.draftConfig.voicePitch = state.voicePitch;
+            if (drawerPitchVal) drawerPitchVal.textContent = `${state.voicePitch}`;
+            if (profileVoicePitchSlider) profileVoicePitchSlider.value = state.voicePitch;
+            if (profilePitchVal) profilePitchVal.textContent = `${state.voicePitch}`;
+            saveState();
+          });
+        }
+
+        if (btnDrawerVoiceTest) {
+          btnDrawerVoiceTest.addEventListener('click', () => {
+            speakText('Esta es una muestra de audio con la voz natural y velocidad seleccionadas.', state.voiceSpeed, state.voicePitch, null, state.selectedVoiceIndex);
+          });
+        }
+      }
+
+      function speakText(textToSpeak, speed = state.voiceSpeed, pitch = state.voicePitch, targetElement = null, voiceIdx = state.selectedVoiceIndex) {
+        if (!state.speechSynth) {
+          console.warn('La síntesis de voz no está soportada en este navegador.');
           return;
         }
 
@@ -3575,28 +4068,48 @@
 
         const utterance = new SpeechSynthesisUtterance(textToSpeak);
         utterance.rate = speed;
-        utterance.lang = 'es-PE'; // Español
+        utterance.pitch = pitch;
+        utterance.lang = 'es-PE'; // Default idioma español
 
-        const voices = state.speechSynth.getVoices();
-        const esVoice = voices.find(v => v.lang.startsWith('es-419') || v.lang.startsWith('es-PE') || v.lang.startsWith('es'));
-        if (esVoice) {
-          utterance.voice = esVoice;
+        if (state.spanishVoices && state.spanishVoices.length > 0) {
+          const chosenVoice = state.spanishVoices[voiceIdx] || state.spanishVoices[0];
+          if (chosenVoice) {
+            utterance.voice = chosenVoice;
+            utterance.lang = chosenVoice.lang;
+          }
         }
 
         utterance.onstart = () => {
           state.isSpeaking = true;
           audioPlayerBar.classList.remove('hidden');
           btnAudioPauseResume.textContent = 'Pausar';
+          if (btnApplyVoiceIcon) btnApplyVoiceIcon.textContent = '⏹';
+          if (btnApplyVoiceLabel) btnApplyVoiceLabel.textContent = 'Detener audio';
+
+          clearSpeechHighlight();
+          if (targetElement) {
+            targetElement.classList.add('speech-reading-active');
+            currentlyHighlightedEl = targetElement;
+          } else if (paragraphs[state.activeParagraphIndex] && !state.isAdaptiveTextActive) {
+            paragraphs[state.activeParagraphIndex].classList.add('speech-reading-active');
+            currentlyHighlightedEl = paragraphs[state.activeParagraphIndex];
+          }
         };
 
         utterance.onend = () => {
           state.isSpeaking = false;
           audioPlayerBar.classList.add('hidden');
+          if (btnApplyVoiceIcon) btnApplyVoiceIcon.textContent = '▶';
+          if (btnApplyVoiceLabel) btnApplyVoiceLabel.textContent = 'Escuchar noticia';
+          clearSpeechHighlight();
         };
 
         utterance.onerror = () => {
           state.isSpeaking = false;
           audioPlayerBar.classList.add('hidden');
+          if (btnApplyVoiceIcon) btnApplyVoiceIcon.textContent = '▶';
+          if (btnApplyVoiceLabel) btnApplyVoiceLabel.textContent = 'Escuchar noticia';
+          clearSpeechHighlight();
         };
 
         state.currentUtterance = utterance;
@@ -3608,14 +4121,22 @@
           state.speechSynth.cancel();
           state.isSpeaking = false;
           audioPlayerBar.classList.add('hidden');
+          if (btnApplyVoiceIcon) btnApplyVoiceIcon.textContent = '▶';
+          if (btnApplyVoiceLabel) btnApplyVoiceLabel.textContent = 'Escuchar noticia';
+          clearSpeechHighlight();
         }
       }
 
       btnVoiceTest.addEventListener('click', () => {
-        speakText('Esta es una prueba de lectura adaptativa con el ritmo configurado.', state.draftConfig.voiceSpeed);
+        speakText('Esta es una prueba de lectura adaptativa con el ritmo y tono configurados.', state.draftConfig.voiceSpeed, state.draftConfig.voicePitch, null, state.draftConfig.selectedVoiceIndex);
       });
 
       btnApplyVoice.addEventListener('click', () => {
+        if (state.isSpeaking) {
+          stopSpeech();
+          return;
+        }
+
         closePanel();
         const curArt = realNewsArticles[state.currentArticleKey];
         if (state.isAdaptiveTextActive) {
@@ -3623,9 +4144,9 @@
         } else {
           if (paragraphs[state.activeParagraphIndex]) {
             const pText = paragraphs[state.activeParagraphIndex].innerText.replace(/🔊 Escuchar/g, '').trim();
-            speakText(pText);
+            speakText(pText, state.voiceSpeed, state.voicePitch, paragraphs[state.activeParagraphIndex]);
           } else {
-            speakText(curArt.title);
+            speakText(curArt.title, state.voiceSpeed, state.voicePitch);
           }
         }
       });
@@ -3713,8 +4234,8 @@
       // Estado de usuario simulado
       const userSession = {
         isLoggedIn: false,
-        name: 'correorandomgmail.com',
-        email: 'correorandomgmail.com',
+        name: 'Lector Digital',
+        email: '',
         isSubscriber: false,
         plan: 'digital'
       };
@@ -3884,11 +4405,11 @@
       if (btnQuickGoogle) {
         btnQuickGoogle.addEventListener('click', () => {
           userSession.isLoggedIn = true;
-          userSession.name = 'correorandomgmail.com';
-          userSession.email = 'correorandomgmail.com';
+          userSession.name = 'Lector Google';
+          userSession.email = 'lector@gmail.com';
           closeModal(modalLogin);
           updateAuthUI();
-          showToast('Sesión iniciada: correorandomgmail.com', '✓');
+          showToast('Sesión iniciada con Google: Lector Google', '✓');
         });
       }
 
@@ -3942,10 +4463,13 @@
       });
 
       // =======================================================================
-      // INICIALIZACIÓN INMEDIATA
+      // INICIALIZACIÓN INMEDIATA Y RESTAURACIÓN DE MEMORIA
       // =======================================================================
-      loadArticle('politica');
+      loadState();
       applyProfileToDOM();
+      initVoiceSynthesis();
+      syncVoiceUI();
+      loadArticle('politica');
     })();
   </script>
 </body>
