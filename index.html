@@ -1525,20 +1525,20 @@
           </div>
         </div>
 
-        <!-- Respuestas de la IA simulada -->
+        <!-- Respuestas del Asistente IA (Tarjeta en Fondo Crema #FAF8F5 con Borde Destacado) -->
         <div>
           <label class="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1.5">
-            Respuesta del Asistente
+            Respuesta del Asistente (Lenguaje Claro)
           </label>
-          <div id="ai-response-box" class="p-4 rounded-xl bg-neutral-50 border border-neutral-300 text-sm text-neutral-800 leading-relaxed min-h-[110px] flex flex-col justify-between">
-            <div id="ai-response-text">
-              Selecciona una pregunta rápida o escribe tu consulta abajo para que la IA analice el texto al instante.
+          <div id="ai-response-box" class="p-4 rounded-xl border-l-4 border-yellow-500 border-t border-r border-b border-neutral-300 text-sm leading-relaxed min-h-[115px] flex flex-col justify-between shadow-2xs transition-all" style="background-color: #FAF8F5; color: #1A1A1A;">
+            <div id="ai-response-text" class="text-sm leading-relaxed" style="color: #1A1A1A;">
+              Selecciona una pregunta rápida o escribe tu consulta abajo para que la IA analice las palabras clave y el contexto de la noticia.
             </div>
-            <div id="ai-response-footer" class="hidden mt-3 pt-2 border-t border-neutral-200 flex items-center justify-between text-xs text-neutral-500">
-              <button id="btn-ai-speak-answer" type="button" class="text-neutral-900 font-bold hover:underline flex items-center gap-1 cursor-pointer">
+            <div id="ai-response-footer" class="hidden mt-3 pt-2.5 border-t border-neutral-200/80 flex items-center justify-between text-xs text-neutral-600">
+              <button id="btn-ai-speak-answer" type="button" class="text-neutral-900 font-bold hover:underline flex items-center gap-1.5 cursor-pointer py-0.5 px-1.5 rounded hover:bg-yellow-200/50 transition">
                 <span>🔊 Escuchar respuesta</span>
               </button>
-              <span class="text-[11px] text-neutral-400">Análisis local instantáneo</span>
+              <span id="ai-response-tag" class="text-[11px] font-mono text-neutral-500">Razonamiento local</span>
             </div>
           </div>
         </div>
@@ -1551,14 +1551,27 @@
               type="text" 
               placeholder="Haz una pregunta sobre el artículo..." 
               class="flex-1 px-3 py-2.5 text-xs bg-white border border-neutral-300 rounded-lg focus:border-yellow-400 focus:outline-none"
+              autocomplete="off"
             />
             <button 
+              id="btn-ai-submit"
               type="submit" 
-              class="px-4 py-2.5 bg-yellow-400 hover:bg-yellow-300 text-neutral-950 font-bold text-xs rounded-lg shadow-xs cursor-pointer transition flex-shrink-0"
+              class="px-4 py-2.5 bg-yellow-400 hover:bg-yellow-300 text-neutral-950 font-bold text-xs rounded-lg shadow-xs cursor-pointer transition flex-shrink-0 flex items-center justify-center min-w-[76px]"
             >
               Preguntar
             </button>
           </form>
+        </div>
+
+        <!-- Historial Reciente de Consultas IA -->
+        <div id="ai-history-section" class="hidden space-y-2 pt-2 border-t border-neutral-200">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-neutral-700">Historial reciente</span>
+            <button id="btn-clear-ai-history" type="button" class="text-[11px] text-red-600 hover:text-red-800 hover:underline font-semibold cursor-pointer">
+              Limpiar preguntas
+            </button>
+          </div>
+          <div id="ai-history-list" class="space-y-1.5 max-h-44 overflow-y-auto pr-1"></div>
         </div>
       </div>
     </div>
@@ -2602,6 +2615,31 @@
           selectedVoiceIndex: 0
         },
 
+        // Memoria y Razonamiento Semántico de la IA Local
+        aiMemory: {
+          // Carpeta 1: Historial persistente de preguntas y respuestas
+          chatHistory: [],
+          
+          // Carpeta 2: Base de Conocimiento estructurada de la noticia
+          knowledgeBase: {
+            articulo: {
+              titulo: "Congreso aprueba en primera votación nueva reforma del sistema pensionario",
+              votos: "68 votos a favor",
+              pensionMinima: "S/ 600 soles mensuales con 20 años de aportes",
+              restriccionRetiros: "Prohibido el retiro del 100% para menores de 40 años",
+              proximaVotacion: "En un plazo de 15 días calendarios",
+              actoresClave: ["Congreso de la República", "Comisión de Economía", "Comisión de Trabajo", "MEF"]
+            },
+            glosarioAmpliado: {
+              "mef": "Ministerio de Economía y Finanzas: la entidad del Estado encargada de administrar el dinero del país.",
+              "afp": "Empresas privadas que administran los fondos de pensiones de los trabajadores.",
+              "onp": "Oficina de Normalización Previsional: el sistema público de pensiones del Estado.",
+              "dictamen": "El documento formal con la propuesta de ley redactada por los congresistas.",
+              "sistema previsional": "El conjunto de normas e instituciones que guardan dinero para tu jubilación."
+            }
+          }
+        },
+
         // Síntesis de voz enriquecida
         speechSynth: window.speechSynthesis || null,
         currentUtterance: null,
@@ -2629,6 +2667,7 @@
             isReadingMaskActive: state.isReadingMaskActive
           };
           localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+          localStorage.setItem('elcomercio_ai_chat_history_v3', JSON.stringify(state.aiMemory.chatHistory || []));
         } catch (e) {
           console.warn('No se pudo guardar la configuración en localStorage:', e);
         }
@@ -2637,27 +2676,36 @@
       function loadState() {
         try {
           const raw = localStorage.getItem(STORAGE_KEY);
-          if (!raw) return;
-          const parsed = JSON.parse(raw);
-          if (parsed.fontSize && parsed.fontSize >= 16 && parsed.fontSize <= 26) state.fontSize = parsed.fontSize;
-          if (parsed.fontFamily) state.fontFamily = parsed.fontFamily;
-          if (parsed.palette) state.palette = parsed.palette;
-          if (typeof parsed.voiceSpeed === 'number') state.voiceSpeed = parsed.voiceSpeed;
-          if (typeof parsed.voicePitch === 'number') state.voicePitch = parsed.voicePitch;
-          if (typeof parsed.selectedVoiceIndex === 'number') state.selectedVoiceIndex = parsed.selectedVoiceIndex;
-          if (parsed.currentAiSummaryMode) state.currentAiSummaryMode = parsed.currentAiSummaryMode;
-          if (typeof parsed.isCleanInterfaceActive === 'boolean') state.isCleanInterfaceActive = parsed.isCleanInterfaceActive;
-          if (typeof parsed.isReadingMaskActive === 'boolean') state.isReadingMaskActive = parsed.isReadingMaskActive;
-          if (typeof parsed.isAdaptiveTextActive === 'boolean') state.isAdaptiveTextActive = parsed.isAdaptiveTextActive;
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed.fontSize && parsed.fontSize >= 16 && parsed.fontSize <= 26) state.fontSize = parsed.fontSize;
+            if (parsed.fontFamily) state.fontFamily = parsed.fontFamily;
+            if (parsed.palette) state.palette = parsed.palette;
+            if (typeof parsed.voiceSpeed === 'number') state.voiceSpeed = parsed.voiceSpeed;
+            if (typeof parsed.voicePitch === 'number') state.voicePitch = parsed.voicePitch;
+            if (typeof parsed.selectedVoiceIndex === 'number') state.selectedVoiceIndex = parsed.selectedVoiceIndex;
+            if (parsed.currentAiSummaryMode) state.currentAiSummaryMode = parsed.currentAiSummaryMode;
+            if (typeof parsed.isCleanInterfaceActive === 'boolean') state.isCleanInterfaceActive = parsed.isCleanInterfaceActive;
+            if (typeof parsed.isReadingMaskActive === 'boolean') state.isReadingMaskActive = parsed.isReadingMaskActive;
+            if (typeof parsed.isAdaptiveTextActive === 'boolean') state.isAdaptiveTextActive = parsed.isAdaptiveTextActive;
 
-          state.draftConfig = {
-            fontSize: state.fontSize,
-            fontFamily: state.fontFamily,
-            palette: state.palette,
-            voiceSpeed: state.voiceSpeed,
-            voicePitch: state.voicePitch,
-            selectedVoiceIndex: state.selectedVoiceIndex
-          };
+            state.draftConfig = {
+              fontSize: state.fontSize,
+              fontFamily: state.fontFamily,
+              palette: state.palette,
+              voiceSpeed: state.voiceSpeed,
+              voicePitch: state.voicePitch,
+              selectedVoiceIndex: state.selectedVoiceIndex
+            };
+          }
+
+          const savedChat = localStorage.getItem('elcomercio_ai_chat_history_v3');
+          if (savedChat) {
+            const parsedChat = JSON.parse(savedChat);
+            if (Array.isArray(parsedChat)) {
+              state.aiMemory.chatHistory = parsedChat;
+            }
+          }
         } catch (e) {
           console.warn('No se pudo recuperar la configuración de localStorage:', e);
         }
@@ -2755,11 +2803,17 @@
       const btnDrawerVoiceTest = document.getElementById('btn-drawer-voice-test');
 
       // IA Local en Panel
+      const aiResponseBox = document.getElementById('ai-response-box');
       const aiResponseText = document.getElementById('ai-response-text');
       const aiResponseFooter = document.getElementById('ai-response-footer');
+      const aiResponseTag = document.getElementById('ai-response-tag');
       const btnAiSpeakAnswer = document.getElementById('btn-ai-speak-answer');
       const aiQueryForm = document.getElementById('ai-query-form');
       const aiUserQueryInput = document.getElementById('ai-user-query-input');
+      const btnAiSubmit = document.getElementById('btn-ai-submit');
+      const aiHistorySection = document.getElementById('ai-history-section');
+      const aiHistoryList = document.getElementById('ai-history-list');
+      const btnClearAiHistory = document.getElementById('btn-clear-ai-history');
 
       // Pantalla 3 (Texto adaptativo)
       const btnAdaptiveReturn = document.getElementById('btn-adaptive-return');
@@ -3164,67 +3218,407 @@
         }
       }
 
-      // Motor de preguntas y respuestas cognitivo
-      function askSimulatedAI(queryKeyOrText) {
-        const article = realNewsArticles[state.currentArticleKey];
-        let answer = '';
+      // =======================================================================
+      // MOTOR DE RAZONAMIENTO SEMÁNTICO LOCAL (aiReasoningEngine)
+      // =======================================================================
+      let isAiProcessing = false;
 
-        const normalized = queryKeyOrText.toLowerCase();
+      function aiReasoningEngine(userQuery) {
+        const cleanQ = (userQuery || '').trim();
+        if (!cleanQ) {
+          return {
+            success: false,
+            answer: 'Por favor, escribe una pregunta sobre la noticia (ej. ¿Cuándo se vota?, ¿Qué son las AFP?).',
+            tag: 'Consulta vacía'
+          };
+        }
 
-        if (normalized.includes('resumen') || normalized.includes('de qué trata') || normalized.includes('30 segundos') || queryKeyOrText === 'resumen') {
-          answer = article.aiAnswers.resumen;
-        } else if (normalized.includes('afecta') || normalized.includes('ciudadano') || normalized.includes('bolsillo') || queryKeyOrText === 'impacto') {
-          answer = article.aiAnswers.impacto;
-        } else if (normalized.includes('favor') || normalized.includes('contra') || normalized.includes('posturas') || queryKeyOrText === 'posturas') {
-          answer = article.aiAnswers.posturas;
-        } else if (normalized.includes('sigue') || normalized.includes('pasos') || normalized.includes('cuándo') || queryKeyOrText === 'pasos') {
-          answer = article.aiAnswers.pasos;
-        } else {
-          // Búsqueda heurística por coincidencia de términos en el artículo
-          let matchedSentence = '';
-          article.paragraphs.forEach(p => {
-            const cleanP = p.replace(/<[^>]*>?/gm, '');
-            const words = normalized.split(/\s+/).filter(w => w.length > 3);
-            const matches = words.filter(w => cleanP.toLowerCase().includes(w));
-            if (matches.length > 0 && !matchedSentence) {
-              matchedSentence = cleanP;
-            }
-          });
+        // Descomposición y normalización sintáctica
+        const normalized = cleanQ.toLowerCase()
+          .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+          .replace(/[¿?¡!.,;:()]/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
 
-          if (matchedSentence) {
-            answer = `De acuerdo con la noticia: "${matchedSentence}"`;
-          } else {
-            answer = `Resumen clave para tu consulta: ${article.expressSummary}`;
+        const words = normalized.split(' ').filter(Boolean);
+        const kb = state.aiMemory.knowledgeBase;
+        const currentArt = realNewsArticles[state.currentArticleKey] || realNewsArticles.politica;
+
+        // Detección de intenciones estructurales
+        const isQueEs = /^(que es|que son|que significa|definicion de|a que se llama|concepto de)\b/.test(normalized) ||
+                        words.includes('significa') || words.includes('definicion');
+        const isCuando = /^(cuando|que dia|en que fecha|en que plazo|cual es el plazo|cronograma)\b/.test(normalized) ||
+                         normalized.includes('cuando') || normalized.includes('plazo') || normalized.includes('fecha de votacion');
+        const isCuanto = /^(cuanto|cuantos|cuanta|cuantas|a cuanto asciende|cual es el monto|que porcentaje)\b/.test(normalized) ||
+                         normalized.includes('cuanto') || normalized.includes('monto') || normalized.includes('cifra') ||
+                         normalized.includes('votos') || normalized.includes('soles') || normalized.includes('porcentaje');
+        const isQuien = /^(quien|quienes|quien es|quienes son|que instituciones|que entidades)\b/.test(normalized) ||
+                        normalized.includes('quien') || normalized.includes('quienes') || normalized.includes('actores');
+        const isPorQue = /^(por que|porque|cual es el motivo|por que razon)\b/.test(normalized) ||
+                         normalized.includes('por que') || normalized.includes('motivo');
+        const isComoAfecta = normalized.includes('afecta') || normalized.includes('me afecta') ||
+                             normalized.includes('bolsillo') || normalized.includes('ciudadano') ||
+                             normalized.includes('trabajador') || normalized.includes('jubilado') ||
+                             normalized.includes('consecuencias');
+
+        // 1. CONCEPTOS Y GLOSARIO AMPLIADO (¿Qué es X?)
+        // Cruce prioritario con state.aiMemory.knowledgeBase.glosarioAmpliado
+        for (const [term, def] of Object.entries(kb.glosarioAmpliado)) {
+          const normTerm = term.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+          if (normalized.includes(normTerm) && (isQueEs || words.length <= 4 || normalized === normTerm)) {
+            return {
+              success: true,
+              answer: def,
+              tag: `Glosario: ${term.toUpperCase()}`
+            };
           }
         }
 
-        aiResponseText.innerHTML = `
-          <div class="font-medium text-neutral-900">${answer}</div>
-        `;
-        aiResponseFooter.classList.remove('hidden');
+        // Cruce complementario con glosario del sistema (glossaryTerms)
+        for (const [term, data] of Object.entries(glossaryTerms)) {
+          const normTerm = term.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+          if (normalized.includes(normTerm) && (isQueEs || words.length <= 4 || normalized === normTerm)) {
+            return {
+              success: true,
+              answer: `${data.title}: ${data.def}`,
+              tag: `Concepto: ${data.title}`
+            };
+          }
+        }
 
-        // Asociar botón de voz de la respuesta
-        btnAiSpeakAnswer.onclick = () => {
-          speakText(answer);
+        // 2. FECHAS Y PLAZOS (¿Cuándo...?)
+        if (isCuando || normalized.includes('vota') || normalized.includes('votacion') || normalized.includes('se debate')) {
+          if (state.currentArticleKey === 'politica' || normalized.includes('pension') || normalized.includes('reforma') || normalized.includes('ley')) {
+            return {
+              success: true,
+              answer: `La próxima votación del dictamen consensuado se realizará ${kb.articulo.proximaVotacion.toLowerCase()}, antes del cierre de la presente legislatura en el Congreso.`,
+              tag: 'Dato exacto: Fecha'
+            };
+          }
+          if (state.currentArticleKey === 'lima' || normalized.includes('metro') || normalized.includes('tren')) {
+            return {
+              success: true,
+              answer: 'El cronograma oficial indica que hacia el último trimestre del presente año se iniciará la marcha blanca técnica con trenes sin cobro de pasajes.',
+              tag: 'Dato exacto: Cronograma'
+            };
+          }
+        }
+
+        // 3. CIFRAS, MONTOS Y CUANTIFICACIÓN (¿Cuánto...?)
+        if (isCuanto || normalized.includes('pension minima') || normalized.includes('voto') || normalized.includes('retiro') || normalized.includes('dinero') || normalized.includes('comision')) {
+          // Votación y número de votos
+          if (normalized.includes('voto') || normalized.includes('aprobo') || normalized.includes('aprobacion') || normalized.includes('congresistas')) {
+            return {
+              success: true,
+              answer: `El proyecto de reforma fue respaldado en primera votación con ${kb.articulo.votos} en el Hemiciclo del Congreso.`,
+              tag: 'Dato exacto: Votos'
+            };
+          }
+
+          // Pensión mínima y aportes
+          if (normalized.includes('pension') || normalized.includes('minima') || normalized.includes('monto') || normalized.includes('jubilacion')) {
+            return {
+              success: true,
+              answer: `El texto acordado establece una pensión mínima garantizada de ${kb.articulo.pensionMinima}.`,
+              tag: 'Dato exacto: Pensión'
+            };
+          }
+
+          // Restricción de retiros
+          if (normalized.includes('retiro') || normalized.includes('retirar') || normalized.includes('100%') || normalized.includes('40')) {
+            return {
+              success: true,
+              answer: `En cuanto a los retiros de fondos de pensiones: queda ${kb.articulo.restriccionRetiros.toLowerCase()}.`,
+              tag: 'Dato exacto: Retiros'
+            };
+          }
+
+          // Comisiones bancarias
+          if (normalized.includes('comision') || normalized.includes('banco') || normalized.includes('caja')) {
+            return {
+              success: true,
+              answer: 'Se propone autorizar a bancos, financieras y cajas municipales para administrar fondos de jubilación, con el objetivo de elevar la competencia y forzar una reducción sustancial de las comisiones de las AFP.',
+              tag: 'Dato exacto: Comisiones'
+            };
+          }
+
+          if (state.currentArticleKey === 'economia') {
+            return {
+              success: true,
+              answer: 'El BCRP mantuvo la tasa de interés de referencia en 5.25%, con una inflación interanual de 1.8% (dentro del rango meta de 1% a 3%) y una proyección de crecimiento del PBI superior al 3.1%.',
+              tag: 'Dato exacto: Economía'
+            };
+          }
+        }
+
+        // 4. ACTORES CLAVE (¿Quién...?)
+        if (isQuien || normalized.includes('actores') || normalized.includes('quienes estan') || normalized.includes('participa')) {
+          if (state.currentArticleKey === 'politica' || normalized.includes('reforma') || normalized.includes('pension')) {
+            const actores = kb.articulo.actoresClave.join(', ');
+            return {
+              success: true,
+              answer: `Los actores clave del proceso son: ${actores}. Las comisiones parlamentarias y el MEF coordinan para presentar una fórmula de consenso.`,
+              tag: 'Actores clave'
+            };
+          }
+          if (state.currentArticleKey === 'lima') {
+            return {
+              success: true,
+              answer: 'Las entidades principales son el Ministerio de Transportes y Comunicaciones (MTC), la Autoridad de Transporte Urbano (ATU) y la concesionaria Metro de Lima Línea 2.',
+              tag: 'Actores clave'
+            };
+          }
+        }
+
+        // 5. IMPACTO CIUDADANO (¿Cómo me afecta?)
+        if (isComoAfecta) {
+          if (state.currentArticleKey === 'politica') {
+            return {
+              success: true,
+              answer: 'Si trabajas de forma independiente o informal, la reforma busca que accedas a una pensión mínima garantizada del Estado. Si aportas a una AFP, tendrás la opción de migrar tus fondos a bancos o cajas para pagar menos comisiones, aunque se restringe el retiro del 100% si eres menor de 40 años.',
+              tag: 'Impacto en tu bolsillo'
+            };
+          }
+          if (currentArt.aiAnswers && currentArt.aiAnswers.impacto) {
+            return {
+              success: true,
+              answer: currentArt.aiAnswers.impacto,
+              tag: 'Impacto ciudadano'
+            };
+          }
+        }
+
+        // 6. POSTURAS Y DEBATE (A favor / En contra / Observaciones)
+        if (normalized.includes('favor') || normalized.includes('contra') || normalized.includes('debate') || normalized.includes('observacion') || normalized.includes('posturas') || normalized.includes('critica') || isPorQue) {
+          if (state.currentArticleKey === 'politica') {
+            return {
+              success: true,
+              answer: 'A favor: Congresistas que defienden incluir a trabajadores informales y bajar comisiones abriendo el mercado a la banca. Observaciones técnicas: El MEF y la SBS advierten que todo subsidio estatal debe contar con respaldo tributario sostenible para no generar déficit fiscal.',
+              tag: 'Posturas y debate'
+            };
+          }
+          if (currentArt.aiAnswers && currentArt.aiAnswers.posturas) {
+            return {
+              success: true,
+              answer: currentArt.aiAnswers.posturas,
+              tag: 'Posturas del debate'
+            };
+          }
+        }
+
+        // 7. RESUMEN O CONSULTA GENERAL DE QUÉ TRATA
+        if (normalized.includes('resumen') || normalized.includes('de que trata') || normalized.includes('en 30 segundos') || normalized.includes('sintesis') || normalized.includes('explicame')) {
+          return {
+            success: true,
+            answer: currentArt.expressSummary || currentArt.easySummary,
+            tag: 'Resumen en lenguaje claro'
+          };
+        }
+
+        // 8. BÚSQUEDA SEMÁNTICA HEURÍSTICA Y CRUCE CON EL ARTÍCULO COMPLETO
+        const stopWords = ['para', 'como', 'sobre', 'este', 'esta', 'estos', 'estas', 'entre', 'desde', 'hasta', 'porque', 'cuando', 'donde', 'tiene', 'tienen', 'haber', 'hacer', 'decir', 'noticia', 'articulo', 'segun', 'peru'];
+        const queryKeywords = words.filter(w => w.length > 2 && !stopWords.includes(w));
+
+        let bestParagraph = '';
+        let maxOverlap = 0;
+
+        currentArt.paragraphs.forEach(p => {
+          const raw = p.replace(/<[^>]*>?/gm, '');
+          const normP = raw.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+          let overlap = 0;
+          queryKeywords.forEach(kw => {
+            if (normP.includes(kw)) overlap += kw.length;
+          });
+          if (overlap > maxOverlap) {
+            maxOverlap = overlap;
+            bestParagraph = raw;
+          }
+        });
+
+        if (maxOverlap > 0 && bestParagraph) {
+          // Extraer 2 a 3 oraciones sencillas
+          const sentences = bestParagraph.split(/(?<=[.?!])\s+/).filter(s => s.trim().length > 8);
+          const plainSummary = sentences.slice(0, 2).join(' ');
+          return {
+            success: true,
+            answer: `De acuerdo con la noticia: "${plainSummary}"`,
+            tag: 'Contexto del artículo'
+          };
+        }
+
+        // 9. SÍNTESIS LÓGICA EN LENGUAJE CLARO (FALLBACK INTELIGENTE)
+        return {
+          success: true,
+          answer: `La noticia se enfoca en: "${currentArt.title}". Puedes consultar datos exactos como fechas de votación, pensión mínima, o conceptos como MEF, AFP y ONP.`,
+          tag: 'Guía de consulta'
         };
+      }
+
+      // Procesamiento de preguntas con estado de carga de 400ms y renderizado
+      function executeAiQuery(explicitText) {
+        if (isAiProcessing) return;
+
+        const rawQuery = explicitText !== undefined ? explicitText : (aiUserQueryInput ? aiUserQueryInput.value : '');
+        const cleanQuery = (rawQuery || '').trim();
+
+        // Limpieza de entrada y mensaje accesible si está vacío
+        if (!cleanQuery) {
+          aiResponseText.innerHTML = `
+            <div class="text-amber-800 font-medium text-xs sm:text-sm flex items-start gap-2 bg-amber-100/70 p-2.5 rounded-lg border border-amber-300" role="alert">
+              <span class="text-base flex-shrink-0">⚠️</span>
+              <span>Por favor, escribe una pregunta sobre la noticia (ej. ¿Cuándo se vota?, ¿Qué son las AFP?).</span>
+            </div>
+          `;
+          aiResponseFooter.classList.add('hidden');
+          return;
+        }
+
+        isAiProcessing = true;
+        if (btnAiSubmit) {
+          btnAiSubmit.disabled = true;
+          btnAiSubmit.classList.add('opacity-70');
+        }
+
+        // Estado visual de carga sutil de 400ms
+        aiResponseText.innerHTML = `
+          <div class="flex items-center gap-2.5 text-neutral-700 font-medium py-3 text-xs sm:text-sm animate-pulse">
+            <span class="text-lg">🧠</span>
+            <span>Analizando palabras y contexto...</span>
+          </div>
+        `;
+        aiResponseFooter.classList.add('hidden');
+
+        setTimeout(() => {
+          isAiProcessing = false;
+          if (btnAiSubmit) {
+            btnAiSubmit.disabled = false;
+            btnAiSubmit.classList.remove('opacity-70');
+          }
+
+          const result = aiReasoningEngine(cleanQuery);
+
+          // Renderizar respuesta en tarjeta #FAF8F5
+          aiResponseText.innerHTML = `
+            <div class="font-normal text-neutral-900 leading-relaxed text-xs sm:text-sm">
+              ${result.answer}
+            </div>
+          `;
+
+          if (aiResponseTag) {
+            aiResponseTag.textContent = result.tag || 'Razonamiento local';
+          }
+
+          aiResponseFooter.classList.remove('hidden');
+
+          // Botón "🔊 Escuchar respuesta" con voz y velocidad del usuario
+          btnAiSpeakAnswer.onclick = () => {
+            speakText(result.answer, state.voiceSpeed, state.voicePitch);
+          };
+
+          // Historial reciente: añadir y sincronizar con localStorage
+          if (result.success) {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            if (!state.aiMemory.chatHistory) state.aiMemory.chatHistory = [];
+            state.aiMemory.chatHistory.push({
+              id: Date.now(),
+              query: cleanQuery,
+              answer: result.answer,
+              tag: result.tag,
+              timestamp: timeStr
+            });
+
+            // Mantener máximo las últimas 8 preguntas
+            if (state.aiMemory.chatHistory.length > 8) {
+              state.aiMemory.chatHistory = state.aiMemory.chatHistory.slice(-8);
+            }
+
+            saveState();
+            renderAiHistory();
+          }
+
+          // Limpiar input si fue ingresado manualmente
+          if (aiUserQueryInput && explicitText === undefined) {
+            aiUserQueryInput.value = '';
+          }
+        }, 400);
+      }
+
+      // Renderizar lista del historial reciente con opción de borrado
+      function renderAiHistory() {
+        if (!aiHistorySection || !aiHistoryList) return;
+
+        const history = state.aiMemory.chatHistory || [];
+        if (history.length === 0) {
+          aiHistorySection.classList.add('hidden');
+          aiHistoryList.innerHTML = '';
+          return;
+        }
+
+        aiHistorySection.classList.remove('hidden');
+        aiHistoryList.innerHTML = history.slice().reverse().map(item => `
+          <button type="button" class="ai-history-item w-full text-left p-2 rounded-lg bg-neutral-100/90 hover:bg-yellow-100/80 border border-neutral-200 transition text-xs flex items-start justify-between gap-2 cursor-pointer" data-hist-id="${item.id}">
+            <div class="truncate flex-1">
+              <span class="font-bold text-neutral-900 block truncate">❓ ${item.query}</span>
+              <span class="text-[11px] text-neutral-500 truncate block mt-0.5">${item.answer}</span>
+            </div>
+            <span class="text-[10px] text-neutral-400 font-mono flex-shrink-0 mt-0.5">${item.timestamp || ''}</span>
+          </button>
+        `).join('');
+
+        // Clic en un item del historial para recuperar la respuesta
+        aiHistoryList.querySelectorAll('.ai-history-item').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = parseInt(btn.getAttribute('data-hist-id'), 10);
+            const found = history.find(h => h.id === id);
+            if (found) {
+              aiResponseText.innerHTML = `
+                <div class="font-normal text-neutral-900 leading-relaxed text-xs sm:text-sm">
+                  ${found.answer}
+                </div>
+              `;
+              if (aiResponseTag) aiResponseTag.textContent = found.tag || 'Historial';
+              aiResponseFooter.classList.remove('hidden');
+              btnAiSpeakAnswer.onclick = () => {
+                speakText(found.answer, state.voiceSpeed, state.voicePitch);
+              };
+            }
+          });
+        });
+      }
+
+      // Botón "Limpiar preguntas"
+      if (btnClearAiHistory) {
+        btnClearAiHistory.addEventListener('click', () => {
+          state.aiMemory.chatHistory = [];
+          saveState();
+          renderAiHistory();
+          showToast('Historial de preguntas limpiado', '🗑️');
+        });
       }
 
       // Chips de preguntas sugeridas
       document.querySelectorAll('.ai-chip-question').forEach(chip => {
         chip.addEventListener('click', () => {
-          const qType = chip.getAttribute('data-q');
-          askSimulatedAI(qType);
+          const chipText = chip.textContent.replace(/^[★\s]+/, '').trim();
+          executeAiQuery(chipText);
         });
       });
 
-      // Formulario de consulta libre
+      // Formulario de consulta libre y tecla Enter en el input
       if (aiQueryForm) {
         aiQueryForm.addEventListener('submit', (e) => {
           e.preventDefault();
-          const query = aiUserQueryInput.value.trim();
-          if (query) {
-            askSimulatedAI(query);
-            aiUserQueryInput.value = '';
+          executeAiQuery();
+        });
+      }
+
+      if (aiUserQueryInput) {
+        aiUserQueryInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            executeAiQuery();
           }
         });
       }
@@ -3361,6 +3755,7 @@
         panelMainView.classList.add('hidden');
         panelProfileView.classList.add('hidden');
         panelAiView.classList.remove('hidden');
+        renderAiHistory();
       }
 
       btnOpenProfileSettings.addEventListener('click', showProfileView);
@@ -4470,6 +4865,7 @@
       initVoiceSynthesis();
       syncVoiceUI();
       loadArticle('politica');
+      renderAiHistory();
     })();
   </script>
 </body>
